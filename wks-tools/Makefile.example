@@ -1,0 +1,16 @@
+RSYNC_TARGET=user@example.com:/var/www/.well-known/openpgpkey/hu/
+KEYRING=
+DOMAIN=example.com
+
+.PHONY: all dry-run hu
+
+all: hu
+	rsync -rvtc --perms --chmod=ug+rw,o+r,Dg+s,Da+x,u-s,Fg-s,o-wt \
+	--delete hu/ $(RSYNC_TARGET)
+
+dry-run: hu
+	rsync --dry-run -rvtc --perms --chmod=ug+rw,o+r,Dg+s,Da+x,u-s,Fg-s,o-wt \
+	--delete hu/ $(RSYNC_TARGET)
+
+hu:
+	./generate-openpgpkey-hu $(DOMAIN) hu $(KEYRING)
